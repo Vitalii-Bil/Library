@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% for book in books %}
+   <h5><li> Book: {{ book }}</li></h5>
+{% endfor %}
+
+Book: {{ books|join:", " }}
+
+<h5>User: {{ cart.user }}</h5>
+
+<form method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-dark">Create an order</button>
+  </div>
+</form>
+
+{% endblock %}

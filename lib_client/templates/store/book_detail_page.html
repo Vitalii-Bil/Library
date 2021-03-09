@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h3>Title: {{ book.title }}</h3></li>
+<h5>Year: {{ book.year }}</h5>
+<h5>Publishing house: <a href="{% url 'store:pub_house_detail' book.publishing_house.id %}">{{ book.publishing_house }}</a></h5>
+<h5>Author: <a href="{% url 'store:author_detail' book.author.id %}">{{ book.author.first_name }} {{book.author.last_name}}</a></h5>
+<h5>Description: {{ book.description }}</h5>
+<h5>Price: {{ book.price }}</h5>
+{% if user.is_authenticated %}
+<h5><a href="{% url 'store:add_to_cart' book.id %}">Add to Cart</a></h5>
+{% endif %}
+
+{% endblock %}
