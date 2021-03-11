@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -45,9 +44,14 @@ class Book(models.Model):
         return self.title
 
 
-class Cart(models.Model):
-    book = models.ManyToManyField(Book, verbose_name=_("book"))
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+class Order(models.Model):
+    book = models.CharField(_("title"), max_length=100)
+    email = models.EmailField(max_length=254)
+    first_name = models.CharField(_("first name"), max_length=100)
+    last_name = models.CharField(_("last name"), max_length=100)
+    phone = models.CharField(_("phone number"), max_length=100)
+    price = models.DecimalField(_('price'), max_digits=8, decimal_places=2)
+    confirmed = models.BooleanField(_('confirmed'), default=False)
 
     def __str__(self):
-        return f"{self.user}'s cart"
+        return f'{self.email} order'

@@ -1,9 +1,5 @@
 from django import forms
 
-from phonenumber_field.modelfields import PhoneNumberField
-
-from .models import Cart
-
 
 class OrderForm(forms.Form):
     email = forms.EmailField(required=True, max_length=254)

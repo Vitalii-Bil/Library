@@ -2,15 +2,16 @@
 
 {% block content %}
 
-<h3>Choose ordering by genre: </h3>
+<h3>Ordered by genre "{{ genre.name }}"</h3>
+
 <select class='form-control' size="1" name="jumpit" onchange="document.location.href=this.value"> 
-  <option selected value="{% url 'store:book_list' %}">All</option>
+
+  <option selected value="">{{genre.name}}</option>
+  <option value="{% url 'store:book_list' %}">All</option>
   {% for genre in genre_list %}
     <option value="{% url 'store:genre_detail' genre.id %}">{{genre.name}}</option>
   {% endfor %}
 </select> 
-
-
 
 <h3>Books:</h3>
 <ul>
@@ -28,5 +29,4 @@
     {% endfor %}
   </div>
 </ul>
-
 {% endblock %}

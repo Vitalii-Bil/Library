@@ -1,4 +1,4 @@
-"""lib_client URL Configuration
+"""lib_employee URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -16,12 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from .views import register
-
 
 urlpatterns = [
-    path('', include('store.urls')),
+    path('', include('wharehouse.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/register/', register, name='register')
 ]
