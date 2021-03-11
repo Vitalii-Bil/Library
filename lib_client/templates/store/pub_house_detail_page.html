@@ -2,8 +2,25 @@
 
 {% block content %}
 
-<h3>Name: {{ object.name }}</h3></li>
-<h5>Year: {{ object.year }}</h5>
-<h5>Info: {{ object.info }}</h5>
+<h3>Name: {{ pub_house.name }}</h3></li>
+<h5>Year: {{ pub_house.year }}</h5>
+<h4>Info: {{ pub_house.info }}</h4>
+
+
+{% if page_obj %}
+  <hr>
+  <h3>Publishing house books: </h3>
+{% endif %}
+
+<div class="jumbotron">
+{% for book in page_obj %}
+  <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
+  <h5>{{ book.description|slice:":30" }}</h5></li>
+  {% if user.is_authenticated %}
+    <a href="{% url 'store:add_to_cart' book.id %}" class="btn btn-dark">Add to Cart</a>
+  {% endif %}
+
+{% endfor %}
+</div>
 
 {% endblock %}

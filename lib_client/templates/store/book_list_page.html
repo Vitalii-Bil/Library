@@ -2,13 +2,21 @@
 
 {% block content %}
 
-<h3>Users:</h3>
+<h3>Books:</h3>
 <ul>
-{% for book in page_obj %}
-    <h4>Book: <a href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
-{% empty %}
-    <li>No books yet.</li>
-{% endfor %}
+  <div class='jumbotron'>
+    {% for book in page_obj %}
+      <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
+      <h6><a class="p-2 text-dark" href="{% url 'store:author_detail' book.author.id %}">{{ book.author.first_name }} {{book.author.last_name}}</a></h6>
+      <h5>{{ book.description|slice:":30" }}</h5></li>
+  
+      {% if user.is_authenticated %}
+        <a href="{% url 'store:add_to_cart' book.id %}" class="btn btn-dark">Add to Cart</a>
+      {% endif %}
+    {% empty %}
+      <h5>No books yet.</h5>
+    {% endfor %}
+  </div>
 </ul>
 
 {% endblock %}

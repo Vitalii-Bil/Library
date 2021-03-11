@@ -2,13 +2,16 @@
 
 {% block content %}
 
-<h3>Users:</h3>
+<h3>Publlishing houses:</h3>
 <ul>
-{% for pub_house in page_obj %}
-    <h4>Publishing house: <a href="{% url 'store:pub_house_detail' pub_house.id %}">{{ pub_house.name }}</a> </h4>
-{% empty %}
-    <li>No Publishing houses yet.</li>
-{% endfor %}
+  <div class='jumbotron'>
+    {% for pub_house in page_obj %}
+      <li><h4><a class="p-2 text-dark" href="{% url 'store:pub_house_detail' pub_house.id %}">{{ pub_house.name }}</a> </h4>
+      <h5>{{ pub_house.info|slice:":30" }}</h5></li>
+    {% empty %}
+      <h5>No Publishing houses yet.</h5>
+    {% endfor %}
+  </div>
 </ul>
 
 {% endblock %}

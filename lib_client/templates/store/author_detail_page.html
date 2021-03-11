@@ -2,9 +2,23 @@
 
 {% block content %}
 
-<h3>first name: {{ author.first_name }}</h3></li>
-<h5>last name: {{ author.last_name }}</h5>
-<h5>bio: {{ author.bio }}</h5>
-<h5>date of birth: {{ author.date_of_birth }}</h5>
+<h3>{{ author.first_name }} {{ author.last_name }}</h3></li>
+<h5>Date of birth: {{ author.date_of_birth }}</h5>
+<h4>Biography: {{ author.bio }}</h4>
+
+{% if page_obj %}
+<hr>
+<h3>Author's books: </h3>
+
+{% endif %}
+<div class="jumbotron">
+{% for book in page_obj %}
+  <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
+  <h5>{{ book.description|slice:":30" }}</h5></li>
+  {% if user.is_authenticated %}
+    <a href="{% url 'store:add_to_cart' book.id %}" class="btn btn-dark">Add to Cart</a>
+  {% endif %}
+{% endfor %}
+</div>
 
 {% endblock %}

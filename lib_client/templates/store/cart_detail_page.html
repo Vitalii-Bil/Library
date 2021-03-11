@@ -2,17 +2,26 @@
 
 {% block content %}
 
-{% for book in books %}
-   <h5><li> Book: {{ book }}</li></h5>
-{% endfor %}
+<h3>Books you want to owrder:</h3>
+<div class="jumbotron">
+  {% for book in books %}
+    <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
+    <h5>{{ book.description|slice:":30" }}</h5></li>
+    <h5>Price: {{ book.price }}</h5>
+    <a href="{% url 'store:remove_from_cart' book.id cart.id %}" class="btn btn-dark">Remove from Cart</a>
+  {% empty %}
+    <h5>No books here yet.</h5>
+  {% endfor %}
+</div>
 
-Book: {{ books|join:", " }}
+<hr>
 
-<h5>User: {{ cart.user }}</h5>
-
+{% if books %}
+  <h4>Total cost: {{ total_cost }}</h4>
+{% endif %}
 <form method="post">
   {% csrf_token %}
-  {{form.as_p}}
+  {{ form.as_p }}
   <div class="form-actions">
     <button type="submit" class="btn btn-dark">Create an order</button>
   </div>

@@ -2,13 +2,17 @@
 
 {% block content %}
 
-<h3>Users:</h3>
+<h3>Authors:</h3>
 <ul>
-{% for author in page_obj %}
-    <h4>Author: <a href="{% url 'store:author_detail' author.id %}">{{ author.first_name }} {{ author.last_name }}</a> </h4>
-{% empty %}
-    <li>No authors yet.</li>
-{% endfor %}
+  <div class='jumbotron'>
+    {% for author in page_obj %}
+      <li><h4><a class="p-2 text-dark" href="{% url 'store:author_detail' author.id %}">{{ author.first_name }} {{ author.last_name }}</a> </h4>
+      <h5>{{ author.bio|slice:":30" }}</h5></li>
+
+    {% empty %}
+      <h5>No authors yet.</h5>
+    {% endfor %}
+  </div>
 </ul>
 
 {% endblock %}

@@ -3,8 +3,12 @@ from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.core.mail import send_mail
+from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
 from django.urls import reverse
+
+from django.db.models import Sum
 
 from .models import Book, Author, PublishingHouse, Cart
 from .forms import OrderForm
@@ -14,8 +18,19 @@ from .forms import OrderForm
 def add_to_cart(request,pk):
     book = get_object_or_404(Book, pk=pk)
     cart,created = Cart.objects.get_or_create(user=request.user)
+    cart.book.add(book)
     messages.success(request, "Cart updated!")
     return redirect('store:book_list')
+
+@login_required
+def remove_from_cart(request, pk_book, pk_cart):
+    cart = Cart.objects.get(pk=pk_cart)
+    if cart.user != request.user: raise Http404()
+
+    book = Book.objects.get(pk=pk_book)
+    cart.book.remove(book)
+    return redirect(reverse('store:cart_detail', kwargs={'pk': cart.id}))
+
 
 
 def index(request):
@@ -41,9 +56,20 @@ class PublishingHouseListView(ListView):
     template_name = 'store/pub_house_list_page.html'
 
 
-class PublishingHouseDetailView(DetailView):
-    model = PublishingHouse
-    template_name = 'store/pub_house_detail_page.html'
+def pub_house_detail(request, pk):
+    pub_house = get_object_or_404(PublishingHouse, pk=pk)
+    books = Book.objects.all().filter(publishing_house=pub_house)
+    paginator = Paginator(books, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'pub_house': pub_house,
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'store/pub_house_detail_page.html', context)
 
 
 class AuthorListView(ListView):
@@ -52,35 +78,46 @@ class AuthorListView(ListView):
     template_name = 'store/author_list_page.html'
 
 
-class AuthorDetailView(DetailView):
-    model = Author
-    template_name = 'store/author_detail_page.html'
+def author_detail(request, pk):
+    author = get_object_or_404(Author, pk=pk)
+    books = Book.objects.all().filter(author=author)
+    paginator = Paginator(books, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'author': author,
+        'page_obj': page_obj,
+    }
+
+    return render(request, 'store/author_detail_page.html', context)
 
 
-class CartDetailView(DetailView):
-    model = Cart
-    template_name = 'store/cart_detail_page.html'
-
-
+@login_required
 def cart_detail(request, pk):
     cart = get_object_or_404(Cart, pk=pk)
-    books = cart.book.all()
+    if cart.user != request.user: raise Http404()
 
+    books = cart.book.all()
+    total_cost = books.aggregate(Sum('price')).get('price__sum') or 0.00
     if request.method == 'POST':
 
         form = OrderForm(request.POST)
-
         if form.is_valid():
-            
-            return HttpResponseRedirect(reverse('store:book_list'))
+            subject = 'New order!'
+            from_email = 'exx@ex.com'
+            message = f"""{books} {form.cleaned_data['email']} {form.cleaned_data['last_name']} {form.cleaned_data['first_name']} {form.cleaned_data['phone_number']}"""
+            send_mail(subject, message, from_email, ['admin@example.com'])
 
+            messages.success(request, "Order created! We send you email in 10 minutes!")
+            return HttpResponseRedirect(reverse('store:book_list'))
     else:
         form = OrderForm()
-
     context = {
         'form': form,
         'cart': cart,
         'books': books,
+        'total_cost': round(total_cost, 2)
     }
-
     return render(request, 'store/cart_detail_page.html', context)

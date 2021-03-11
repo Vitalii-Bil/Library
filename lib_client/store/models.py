@@ -39,7 +39,7 @@ class Book(models.Model):
 
 class Cart(models.Model):
     book = models.ManyToManyField(Book, verbose_name=_("book"))
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.user}'s cart"
