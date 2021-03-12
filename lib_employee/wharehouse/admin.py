@@ -24,7 +24,8 @@ class PublishingHouseAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    fields = ['title', 'year', 'publishing_house', 'author', 'price', 'description', 'genre']
+    fields = ['title', 'year', 'publishing_house',
+              'author', 'price', 'description', 'genre', 'sold']
     search_fields = ('title',)
     list_display = ('title', 'author')
     list_filter = ('author', 'publishing_house', 'genre')
@@ -37,7 +38,8 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ['book', 'email', 'first_name', 'last_name', 'phone', 'price', 'confirmed']
+    fields = ['book', 'email', 'first_name', 'last_name',
+              'phone', 'price', 'confirmed']
     actions = [make_confirmed]
     list_filter = ('confirmed',)
     list_display = ('email', 'phone')

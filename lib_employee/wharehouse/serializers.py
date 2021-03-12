@@ -32,11 +32,13 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         many = True
         model = Book
-        fields = ['id', 'title', 'year', 'price', 'description', 'publishing_house', 'author', 'genre']
+        fields = ['id', 'title', 'year', 'price', 'description',
+                  'publishing_house', 'author', 'genre', 'sold']
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'book', 'email', 'first_name', 'last_name', 'phone', 'price', 'confirmed']
+        fields = ['id', 'book', 'email', 'first_name',
+                  'last_name', 'phone', 'price', 'confirmed']

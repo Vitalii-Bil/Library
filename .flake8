@@ -1,5 +1,5 @@
 [flake8]
-exclude= .git, *migrations*, venv
+exclude= .git, *migrations*, venv, get_book_list_api.py
 max-line-length = 119
 application-import-names = hillel_blog
 import-order-style = google
