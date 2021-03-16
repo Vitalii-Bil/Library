@@ -45,7 +45,7 @@ class BookListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)
-        p = Paginator(Book.objects.select_related().all(), self.paginate_by)
+        p = Paginator(Book.objects.all(), self.paginate_by)
         context['articles'] = p.page(context['page_obj'].number)
         context['genre_list'] = Genre.objects.all()
 

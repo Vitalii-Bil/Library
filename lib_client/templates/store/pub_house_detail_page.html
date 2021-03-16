@@ -16,6 +16,8 @@
 {% for book in page_obj %}
   <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
   <h5>{{ book.description|slice:":30" }}</h5></li>
+  <h5>Price: {{ book.price }} UAH</h5>
+	<h5>In stock: {{ book.quantity }}</h5>
   {% if user.is_authenticated %}
     <a href="{% url 'store:add_to_cart' book.id %}" class="btn btn-dark">Add to Cart</a>
   {% endif %}

@@ -23,7 +23,7 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     fields = ['title', 'year', 'publishing_house',
-              'author', 'price', 'description', 'genre', 'sold']
+              'author', 'price', 'description', 'genre']
 
 
 @admin.register(Genre)
