@@ -7,6 +7,8 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import DetailView, ListView
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from .forms import OrderForm
 from .models import Author, Book, Cart, Genre, PublishingHouse
@@ -38,6 +40,7 @@ def index(request):
     return render(request, 'store/index.html')
 
 
+@method_decorator(cache_page(60 * 60), name='dispatch')
 class BookListView(ListView):
     model = Book
     paginate_by = 10
@@ -52,17 +55,19 @@ class BookListView(ListView):
         return context
 
 
+@method_decorator(cache_page(60 * 60), name='dispatch')
 class BookDetailView(DetailView):
     model = Book
     template_name = 'store/book_detail_page.html'
 
 
+@method_decorator(cache_page(60 * 60), name='dispatch')
 class PublishingHouseListView(ListView):
     model = PublishingHouse
     paginate_by = 10
     template_name = 'store/pub_house_list_page.html'
 
-
+@cache_page(60 * 60)
 def pub_house_detail(request, pk):
     pub_house = get_object_or_404(PublishingHouse, pk=pk)
     books = Book.objects.all().filter(publishing_house=pub_house)
@@ -79,12 +84,14 @@ def pub_house_detail(request, pk):
     return render(request, 'store/pub_house_detail_page.html', context)
 
 
+@method_decorator(cache_page(60 * 60), name='dispatch')
 class AuthorListView(ListView):
     model = Author
     paginate_by = 10
     template_name = 'store/author_list_page.html'
 
 
+@cache_page(60 * 60)
 def author_detail(request, pk):
     author = get_object_or_404(Author, pk=pk)
     books = Book.objects.all().filter(author=author)
@@ -101,6 +108,7 @@ def author_detail(request, pk):
     return render(request, 'store/author_detail_page.html', context)
 
 
+@cache_page(60 * 60)
 def genre_detail(request, pk):
     genre = get_object_or_404(Genre, pk=pk)
     books = Book.objects.all().filter(genre=genre)
