@@ -11,8 +11,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    'scraping-task-odd_hour': {
-        'task': 'posts.tasks.add_posts_rss',
-        'schedule': crontab(hour='1-23/2'),
+    'sync_db_at_midnight': {
+        'task': 'posts.tasks.sync_db',
+        'schedule': crontab(minute=0, hour=0),
     },
 }

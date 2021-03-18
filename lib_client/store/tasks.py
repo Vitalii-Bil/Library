@@ -1,7 +1,7 @@
 from celery import shared_task
 import requests
 
-from .models import Book, Author, Genre, PublishingHouse
+from .models import Author, Book, Genre, PublishingHouse
 
 
 def change_or_add_book(resp, numb_of_similar_books):
@@ -49,7 +49,7 @@ def change_or_add_book(resp, numb_of_similar_books):
 
 
 @shared_task
-def add_posts_rss():
+def sync_db():
 
     try:
         url = 'http://127.0.0.1:8000/book.json'
@@ -57,23 +57,18 @@ def add_posts_rss():
 
         numb_of_similar_books = 1  # variable for counting similar books
         response_len = len(response)
-
         book_title_list = []  # list of book's titles, that are in api request
         book_description_list = []  # list of book's descriptions, that are in api request
 
         for counter, resp in enumerate(response):
 
             if counter != response_len - 1 and resp['title'] == response[counter + 1]['title']:
-
                 numb_of_similar_books += 1
                 continue
 
             else:
-
                 change_or_add_book(resp=resp, numb_of_similar_books=numb_of_similar_books)
-
                 numb_of_similar_books = 1
-
                 book_title_list += [resp['title']]
                 book_description_list += [resp['description']]
 

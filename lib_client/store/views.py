@@ -6,9 +6,10 @@ from django.db.models import Sum
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.views.generic import DetailView, ListView
-from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.generic import DetailView, ListView
+
 
 from .forms import OrderForm
 from .models import Author, Book, Cart, Genre, PublishingHouse
@@ -66,6 +67,7 @@ class PublishingHouseListView(ListView):
     model = PublishingHouse
     paginate_by = 10
     template_name = 'store/pub_house_list_page.html'
+
 
 @cache_page(60 * 60)
 def pub_house_detail(request, pk):
