@@ -81,3 +81,18 @@ def sync_db():
     except Exception as e:
         print('Synchronization of two databases failed. See exception:')  # noqa:T001
         print(e)  # noqa:T001
+
+
+@shared_task
+def send_order(first_name, last_name, email, phone_number, books, total_cost): 
+
+    data = {
+        "book": f"{books}",
+        "email": f"{email}",
+        "first_name": f"{first_name}",
+        "last_name": f"{last_name}",
+        "phone": f"{phone_number}",
+        "price": total_cost
+    }
+
+    r = requests.post('http://localhost:8000/order/create', data=data) 

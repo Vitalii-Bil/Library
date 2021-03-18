@@ -13,6 +13,7 @@ from django.views.generic import DetailView, ListView
 
 from .forms import OrderForm
 from .models import Author, Book, Cart, Genre, PublishingHouse
+from .tasks import send_order as celery_send_order
 
 
 @login_required
@@ -142,13 +143,16 @@ def cart_detail(request, pk):
 
         form = OrderForm(request.POST)
         if form.is_valid():
+            '''
             subject = 'New order!'
             from_email = 'exx@ex.com'
             message = f"""{books} {form.cleaned_data['email']}
             {form.cleaned_data['last_name']} {form.cleaned_data['first_name']}
             {form.cleaned_data['phone_number']}"""
             send_mail(subject, message, from_email, ['admin@example.com'])
-
+            '''
+            celery_send_order.delay()
+            
             messages.success(request, "Order created! We send you email in 10 minutes!")
             return HttpResponseRedirect(reverse('store:book_list'))
     else:
