@@ -84,7 +84,7 @@ def sync_db():
 
 
 @shared_task
-def send_order(first_name, last_name, email, phone_number, books, total_cost): 
+def send_order(first_name, last_name, email, phone_number, books, total_cost):
 
     data = {
         "book": f"{books}",
@@ -95,4 +95,4 @@ def send_order(first_name, last_name, email, phone_number, books, total_cost):
         "price": total_cost
     }
 
-    r = requests.post('http://localhost:8000/order/create', data=data) 
+    requests.post('http://localhost:8000/order/create', data=data)

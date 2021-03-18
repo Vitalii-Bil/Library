@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Sum
 from django.http import Http404, HttpResponseRedirect
@@ -152,7 +152,7 @@ def cart_detail(request, pk):
             send_mail(subject, message, from_email, ['admin@example.com'])
             '''
             celery_send_order.delay()
-            
+
             messages.success(request, "Order created! We send you email in 10 minutes!")
             return HttpResponseRedirect(reverse('store:book_list'))
     else:
