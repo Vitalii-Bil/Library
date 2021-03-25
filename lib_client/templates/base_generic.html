@@ -26,9 +26,7 @@
       <a class="btn btn-dark" href="{% url 'register' %}">Register</a>
     {% endif %}
     {% if user.is_authenticated %}
-      {% if user.cart %}
-      <a class="btn btn-dark" href="{% url 'store:cart_detail' user.cart.id %}">Cart</a>
-      {% endif %}
+      <a class="btn btn-dark" href="{% url 'store:cart_detail' %}">Cart</a>
       <a class="btn btn-dark" href="{% url 'logout' %}">Logout</a>
     {% endif %}
       

@@ -47,8 +47,17 @@ class Book(models.Model):
 
 
 class Cart(models.Model):
-    book = models.ManyToManyField(Book, verbose_name=_("book"))
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.user}'s cart"
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey('Cart', null=True, blank=True, on_delete=models.CASCADE,)
+    book = models.ForeignKey(Book, verbose_name=_("book"), on_delete=models.CASCADE,)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.book}: {self.quantity}:"
+

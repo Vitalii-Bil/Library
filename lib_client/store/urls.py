@@ -18,7 +18,7 @@ urlpatterns = [
     path('pub-house/<int:pk>/', views.pub_house_detail, name='pub_house_detail'),
 
     path('add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
-    path('cart/<int:pk>/', views.cart_detail, name='cart_detail'),
+    path('cart/', views.cart_detail, name='cart_detail'),
     path('remove-from-cart/<int:pk_book>/<int:pk_cart>', views.remove_from_cart, name='remove_from_cart'),
     path('genre/<int:pk>', views.genre_detail, name='genre_detail')
 ]

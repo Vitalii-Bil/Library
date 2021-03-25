@@ -4,11 +4,11 @@
 
 <h3>Books you want to owrder:</h3>
 <div class="jumbotron">
-  {% for book in books %}
-    <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
-    <h5>{{ book.description|slice:":30" }}</h5></li>
-    <h5>Price: {{ book.price }}</h5>
-    <a href="{% url 'store:remove_from_cart' book.id cart.id %}" class="btn btn-dark">Remove from Cart</a>
+  {% for cart_item in cart_items %}
+    <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' cart_item.book.id %}">{{ cart_item.book.title }}</a> </h4>
+    <h5>{{ cart_item.book.description|slice:":30" }}</h5></li>
+    <h5>Price: {{ cart_item.book.price }}</h5>
+    <a href="{% url 'store:remove_from_cart' cart_item.book.id cart.id %}" class="btn btn-dark">Remove from Cart</a>
   {% empty %}
     <h5>No books here yet.</h5>
   {% endfor %}
