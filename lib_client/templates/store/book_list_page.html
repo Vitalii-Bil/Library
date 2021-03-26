@@ -17,8 +17,9 @@
   <div class='jumbotron'>
     {% for book in page_obj %}
       <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' book.id %}">{{ book.title }}</a> </h4>
-      <h6><a class="p-2 text-dark" href="{% url 'store:author_detail' book.author.id %}">{{ book.author.first_name }} {{book.author.last_name}}</a></h6>
-      <h5>{{ book.description|slice:":30" }}</h5>
+      <h6>Author: <a class="p-2 text-dark" href="{% url 'store:author_detail' book.author.id %}">{{ book.author.first_name }} {{book.author.last_name}}</a></h6>
+      <h5>Description: {{ book.description|slice:":30" }}</h5>
+      <h5>Publishing house: <a class="p-2 text-dark" href="{% url 'store:pub_house_detail' book.publishing_house.id %}">{{ book.publishing_house }}</a></h5>
       <h5>Price: {{ book.price }} UAH</h5>
       <h5>In stock: {{ book.quantity }}</h5>
   
