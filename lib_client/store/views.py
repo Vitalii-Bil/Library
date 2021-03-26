@@ -28,14 +28,12 @@ def add_to_cart(request, pk):
 
 
 @login_required
-def remove_from_cart(request, pk_book, pk_cart):
-    cart = Cart.objects.get(pk=pk_cart)
-    if cart.user != request.user:
-        raise Http404()
+def remove_from_cart(request, pk_cart_item):
+    cart = Cart.objects.get(user=request.user)
 
-    book = Book.objects.get(pk=pk_book)
-    cart.book.remove(book)
-    return redirect(reverse('store:cart_detail', kwargs={'pk': cart.id}))
+    cart_item = CartItem.objects.get(pk=pk_cart_item, cart=cart)
+    cart_item.delete()
+    return redirect(reverse('store:cart_detail'))
 
 
 def index(request):
