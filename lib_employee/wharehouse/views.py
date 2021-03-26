@@ -6,7 +6,7 @@ from .serializers import BookInstanceSerializer, OrderSerializer
 
 
 class BookList(mixins.ListModelMixin, generics.GenericAPIView):
-    queryset = BookInstance.objects.order_by('book__title', 'book__author')
+    queryset = BookInstance.objects.order_by('book__title', 'book__author').filter(sold=False)
     serializer_class = BookInstanceSerializer
 
     def get(self, request, *args, **kwargs):
