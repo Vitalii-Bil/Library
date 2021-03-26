@@ -39,10 +39,17 @@ class Book(models.Model):
     price = models.DecimalField(_('price'), max_digits=6, decimal_places=2)
     description = models.TextField(_("description"), blank=True)
     genre = models.ManyToManyField(Genre, verbose_name=_("genre"))
-    sold = models.BooleanField(_('sold'), default=False)
 
     def __str__(self):
         return self.title
+
+
+class BookInstance(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+    sold = models.BooleanField(_('sold'), default=False)
+
+    def __str__(self):
+        return self.book.title
 
 
 class Order(models.Model):

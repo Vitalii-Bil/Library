@@ -5,38 +5,38 @@ from .models import Author, Book, Genre, PublishingHouse
 
 
 def change_or_add_book(resp, numb_of_similar_books):
-    if Book.objects.filter(title=resp['title'], description=resp['description']).exists():
-        book = Book.objects.get(title=resp['title'], description=resp['description'])
+    if Book.objects.filter(title=resp['book']['title'], description=resp['book']['description']).exists():
+        book = Book.objects.get(title=resp['book']['title'], description=resp['book']['description'])
         book.quantity = numb_of_similar_books
         book.save()
 
     else:
         author, created = Author.objects.get_or_create(
-            first_name=resp['author']['first_name'],
-            last_name=resp['author']['last_name'],
-            bio=resp['author']['bio'],
-            date_of_birth=resp['author']['date_of_birth'],
+            first_name=resp['book']['author']['first_name'],
+            last_name=resp['book']['author']['last_name'],
+            bio=resp['book']['author']['bio'],
+            date_of_birth=resp['book']['author']['date_of_birth'],
         )
 
         publishing_house, created = PublishingHouse.objects.get_or_create(
-            name=resp['publishing_house']['name'],
-            info=resp['publishing_house']['info'],
-            year=resp['publishing_house']['year'],
+            name=resp['book']['publishing_house']['name'],
+            info=resp['book']['publishing_house']['info'],
+            year=resp['book']['publishing_house']['year'],
         )
 
         genre_list = []
 
-        for genre_resp in resp['genre']:
+        for genre_resp in resp['book']['genre']:
             genre, created = Genre.objects.get_or_create(name=genre_resp['name'])
             genre_list += [genre]
 
         book = Book(
-            title=resp['title'],
-            year=resp['year'],
+            title=resp['book']['title'],
+            year=resp['book']['year'],
             publishing_house=publishing_house,
             author=author,
-            price=resp['price'],
-            description=resp['description'],
+            price=resp['book']['price'],
+            description=resp['book']['description'],
             quantity=numb_of_similar_books
 
         )
@@ -62,15 +62,15 @@ def sync_db():
 
         for counter, resp in enumerate(response):
 
-            if counter != response_len - 1 and resp['title'] == response[counter + 1]['title']:
+            if counter != response_len - 1 and resp['book']['title'] == response[counter + 1]['book']['title']:
                 numb_of_similar_books += 1
                 continue
 
             else:
                 change_or_add_book(resp=resp, numb_of_similar_books=numb_of_similar_books)
                 numb_of_similar_books = 1
-                book_title_list += [resp['title']]
-                book_description_list += [resp['description']]
+                book_title_list += [resp['book']['title']]
+                book_description_list += [resp['book']['description']]
 
         sold_books = Book.objects.exclude(title__in=book_title_list,
                                           description__in=book_description_list)

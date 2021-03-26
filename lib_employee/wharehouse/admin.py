@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Author, Book, Genre, Order, PublishingHouse
+from .models import Author, Book, BookInstance, Genre, Order, PublishingHouse
 
 
 def make_confirmed(modeladmin, request, queryset):
@@ -25,7 +25,7 @@ class PublishingHouseAdmin(admin.ModelAdmin):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     fields = ['title', 'year', 'publishing_house',
-              'author', 'price', 'description', 'genre', 'sold']
+              'author', 'price', 'description', 'genre']
     search_fields = ('title',)
     list_display = ('title', 'author')
     list_filter = ('author', 'publishing_house', 'genre')
@@ -34,6 +34,11 @@ class BookAdmin(admin.ModelAdmin):
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
     fields = ['name']
+
+
+@admin.register(BookInstance)
+class BookInstanceAdmin(admin.ModelAdmin):
+    fields = ['book', 'sold']
 
 
 @admin.register(Order)

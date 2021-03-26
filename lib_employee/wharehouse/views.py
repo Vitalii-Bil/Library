@@ -1,13 +1,13 @@
 from rest_framework import generics
 from rest_framework import mixins
 
-from .models import Book, Order
-from .serializers import BookSerializer, OrderSerializer
+from .models import BookInstance, Order
+from .serializers import BookInstanceSerializer, OrderSerializer
 
 
 class BookList(mixins.ListModelMixin, generics.GenericAPIView):
-    queryset = Book.objects.filter(sold=False).order_by('title', 'author')
-    serializer_class = BookSerializer
+    queryset = BookInstance.objects.order_by('book__title', 'book__author')
+    serializer_class = BookInstanceSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

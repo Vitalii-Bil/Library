@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Author, Book, Genre, Order, PublishingHouse
+from .models import Author, Book, BookInstance, Genre, Order, PublishingHouse
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -33,7 +33,16 @@ class BookSerializer(serializers.ModelSerializer):
         many = True
         model = Book
         fields = ['id', 'title', 'year', 'price', 'description',
-                  'publishing_house', 'author', 'genre', 'sold']
+                  'publishing_house', 'author', 'genre']
+
+
+class BookInstanceSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)
+
+    class Meta:
+        many = True
+        model = BookInstance
+        fields = ['id', 'book', 'sold']
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
