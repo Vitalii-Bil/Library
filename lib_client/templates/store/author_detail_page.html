@@ -20,6 +20,9 @@
   {% if user.is_authenticated %}
     <a href="{% url 'store:add_to_cart' book.id %}" class="btn btn-dark">Add to Cart</a>
   {% endif %}
+  <hr>
+  {% empty %}
+    <h5>No books yet.</h5>
 {% endfor %}
 </div>
 

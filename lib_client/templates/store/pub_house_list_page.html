@@ -8,6 +8,7 @@
     {% for pub_house in page_obj %}
       <li><h4><a class="p-2 text-dark" href="{% url 'store:pub_house_detail' pub_house.id %}">{{ pub_house.name }}</a> </h4>
       <h5>{{ pub_house.info|slice:":30" }}</h5></li>
+       <hr>
     {% empty %}
       <h5>No Publishing houses yet.</h5>
     {% endfor %}

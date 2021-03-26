@@ -9,6 +9,7 @@
     <h5>{{ cart_item.book.description|slice:":30" }}</h5></li>
     <h5>Price: {{ cart_item.book.price }}</h5>
     <a href="{% url 'store:remove_from_cart' cart_item.id %}" class="btn btn-dark">Remove from Cart</a>
+    <hr>
   {% empty %}
     <h5>No books here yet.</h5>
   {% endfor %}
@@ -16,7 +17,7 @@
 
 <hr>
 
-{% if books %}
+{% if cart_items %}
   <h4>Total cost: {{ total_cost }} UAH</h4>
 {% endif %}
 <form method="post">

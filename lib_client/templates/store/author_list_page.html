@@ -8,7 +8,7 @@
     {% for author in page_obj %}
       <li><h4><a class="p-2 text-dark" href="{% url 'store:author_detail' author.id %}">{{ author.first_name }} {{ author.last_name }}</a> </h4>
       <h5>{{ author.bio|slice:":30" }}</h5></li>
-
+      <hr>
     {% empty %}
       <h5>No authors yet.</h5>
     {% endfor %}

@@ -73,7 +73,7 @@ class PublishingHouseListView(ListView):
 # @cache_page(60 * 60)
 def pub_house_detail(request, pk):
     pub_house = get_object_or_404(PublishingHouse, pk=pk)
-    books = Book.objects.all().filter(publishing_house=pub_house)
+    books = pub_house.book_set.all()
     paginator = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -97,7 +97,7 @@ class AuthorListView(ListView):
 # @cache_page(60 * 60)
 def author_detail(request, pk):
     author = get_object_or_404(Author, pk=pk)
-    books = Book.objects.all().filter(author=author)
+    books = author.book_set.all()
     paginator = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -114,7 +114,7 @@ def author_detail(request, pk):
 # @cache_page(60 * 60)
 def genre_detail(request, pk):
     genre = get_object_or_404(Genre, pk=pk)
-    books = Book.objects.all().filter(genre=genre)
+    books = genre.book_set.all()
     paginator = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -134,8 +134,8 @@ def genre_detail(request, pk):
 @login_required
 def cart_detail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_items = CartItem.objects.all().filter(cart=cart)
-    total_cost = cart_items.aggregate(Sum('book')).get('price__sum') or 0.00
+    cart_items = cart.cartitem_set.all()
+    total_cost = cart_items.aggregate(Sum('book__price')).get('price__sum') or 0.00
     if request.method == 'POST':
 
         form = OrderForm(request.POST)
