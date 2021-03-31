@@ -12,7 +12,7 @@ from django.views.generic import DetailView, ListView
 
 from .forms import CartItemForm, OrderForm
 from .models import Author, Book, Cart, CartItem, Genre, Order, OrderItem, PublishingHouse
-#  from .tasks import send_order as celery_send_order
+from .tasks import send_order as celery_send_order
 
 
 @login_required
@@ -150,6 +150,8 @@ def cart_detail(request):
             order.user = request.user
             order.save()
 
+            books = {}
+
             for cart_item in cart_items:
                 order_item = OrderItem()
                 order_item.book = cart_item.book
@@ -157,9 +159,12 @@ def cart_detail(request):
                 order_item.order = order
                 order_item.save()
 
+                books[order_item.book] = order_item.quantity
+
             cart.delete()
 
-            #  celery_send_order.delay()
+            celery_send_order.delay(order.first_name, order.last_name,
+                                    order.email, order.phone, books, total_cost)
 
             messages.success(request, "Order created! We send you email in 10 minutes!")
             return HttpResponseRedirect(reverse('store:book_list'))

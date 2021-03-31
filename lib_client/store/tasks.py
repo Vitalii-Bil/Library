@@ -87,7 +87,7 @@ def sync_db():
 def send_order(first_name, last_name, email, phone_number, books, total_cost):
 
     data = {
-        "book": f"{books}",
+        "book": books,
         "email": f"{email}",
         "first_name": f"{first_name}",
         "last_name": f"{last_name}",
