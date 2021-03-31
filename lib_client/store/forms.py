@@ -12,6 +12,6 @@ class OrderForm(forms.Form):
 
 class CartItemForm(forms.ModelForm):
 
-	class Meta:
-		model = CartItem
-		exclude = ['book', 'cart']
+    class Meta:
+        model = CartItem
+        exclude = ['book', 'cart']
