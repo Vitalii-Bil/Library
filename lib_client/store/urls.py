@@ -20,5 +20,8 @@ urlpatterns = [
     path('add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart_detail, name='cart_detail'),
     path('remove-from-cart/<int:pk_cart_item>/', views.remove_from_cart, name='remove_from_cart'),
-    path('genre/<int:pk>', views.genre_detail, name='genre_detail')
+    path('genre/<int:pk>', views.genre_detail, name='genre_detail'),
+
+    path('order/<int:pk>', views.order_detail, name='order_detail'),
+    path('order/', views.OrderListView.as_view(), name='order_list'),
 ]

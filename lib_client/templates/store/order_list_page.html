@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h3>Your orders:</h3>
+<ul>
+  <div class='jumbotron'>
+    {% for order in page_obj %}
+      <li><h4><a class="p-2 text-dark" href="{% url 'store:order_detail' order.id %}">Order {{ forloop.counter }}</a> </h4>
+      <h5>Date: {{ order.date }}</h5>
+      <hr>
+    {% empty %}
+      <h5>No orders yet.</h5>
+    {% endfor %}
+  </div>
+</ul>
+
+{% endblock %}

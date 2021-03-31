@@ -60,3 +60,25 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.book}: {self.quantity}:"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(_("first name"), max_length=100)
+    last_name = models.CharField(_("last name"), max_length=100)
+    phone = models.CharField(_("phone number"), max_length=100)
+    price = models.DecimalField(_('price'), max_digits=8, decimal_places=2)
+    email = models.EmailField(_('email'), max_length=254)
+
+    def __str__(self):
+        return f"{self.user}'s Order"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', null=True, blank=True, on_delete=models.CASCADE,)
+    book = models.ForeignKey(Book, verbose_name=_("book"), on_delete=models.CASCADE,)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.book}: {self.quantity}:"

@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h3>Your order:</h3>
+
+<h4>First name: {{ order.first_name }}</h4>
+<h4>Last name: {{ order.last_name }}</h4>
+<h4>Phone number: {{ order.phone }}</h4>
+<h4>Email: {{ order.email }}</h4>
+<h4>Date: {{ order.date }}</h4>
+<hr>
+
+<div class="jumbotron">
+  {% for order_item in order_items %}
+    <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' order_item.book.id %}">{{ order_item.book.title }}</a> </h4>
+    <h5>Description: {{ order_item.book.description|slice:":30" }}</h5></li>
+    <h5>Price: {{ order_item.book.price }}</h5>
+    <hr>
+  {% empty %}
+    <h5>No books here.</h5>
+  {% endfor %}
+</div>
+<hr>
+
+<h4>Total cost: {{ order.price }}</h4>
+
+
+{% endblock %}

@@ -5,14 +5,14 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-# from django.utils.decorators import method_decorator
+from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView
 
 
 from .forms import OrderForm
-from .models import Author, Book, Cart, CartItem, Genre, PublishingHouse
-from .tasks import send_order as celery_send_order
+from .models import Author, Book, Cart, CartItem, Genre, Order, OrderItem, PublishingHouse
+#  from .tasks import send_order as celery_send_order
 
 
 @login_required
@@ -141,7 +141,25 @@ def cart_detail(request):
         form = OrderForm(request.POST)
         if form.is_valid():
 
-            celery_send_order.delay()
+            order = Order()
+            order.email = form.cleaned_data['email']
+            order.phone = form.cleaned_data['phone_number']
+            order.first_name = form.cleaned_data['first_name']
+            order.last_name = form.cleaned_data['last_name']
+            order.price = total_cost
+            order.user = request.user
+            order.save()
+
+            for cart_item in cart_items:
+                order_item = OrderItem()
+                order_item.book = cart_item.book
+                order_item.quantity = cart_item.quantity
+                order_item.order = order
+                order_item.save()
+
+            cart.delete()
+
+            #  celery_send_order.delay()
 
             messages.success(request, "Order created! We send you email in 10 minutes!")
             return HttpResponseRedirect(reverse('store:book_list'))
@@ -154,3 +172,26 @@ def cart_detail(request):
         'total_cost': round(total_cost, 2)
     }
     return render(request, 'store/cart_detail_page.html', context)
+
+
+@method_decorator(login_required, name='dispatch')
+class OrderListView(ListView):
+    model = Order
+    paginate_by = 10
+    template_name = 'store/order_list_page.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+@login_required
+def order_detail(request, pk):
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    order_items = order.orderitem_set.all()
+
+    context = {
+        'order': order,
+        'order_items': order_items,
+    }
+
+    return render(request, 'store/order_detail_page.html', context)
