@@ -16,6 +16,7 @@
     <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' order_item.book.id %}">{{ order_item.book.title }}</a> </h4>
     <h5>Description: {{ order_item.book.description|slice:":30" }}</h5></li>
     <h5>Price: {{ order_item.book.price }}</h5>
+    <h5>Quantity: {{ order_item.quantity }}</h5>
     <hr>
   {% empty %}
     <h5>No books here.</h5>

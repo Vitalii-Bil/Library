@@ -2,15 +2,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, UpdateView
 
 
-from .forms import OrderForm
+from .forms import OrderForm, CartItemForm
 from .models import Author, Book, Cart, CartItem, Genre, Order, OrderItem, PublishingHouse
 #  from .tasks import send_order as celery_send_order
 
@@ -195,3 +195,29 @@ def order_detail(request, pk):
     }
 
     return render(request, 'store/order_detail_page.html', context)
+
+
+def cart_item_update(request, pk):
+    cart_item = get_object_or_404(CartItem, pk=pk)
+
+    if not cart_item.cart.user == request.user:
+            raise Http404()
+
+    if request.method == 'POST':
+        form = CartItemForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['quantity'] <= cart_item.book.quantity:
+                cart_item.quantity = form.cleaned_data['quantity']
+            else:
+                cart_item.quantity = cart_item.book.quantity
+            cart_item.save()
+            return HttpResponseRedirect(reverse('store:cart_detail'))
+
+    else:
+        form = CartItemForm(instance=cart_item)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'store/cart_item_update_page.html', context)
+

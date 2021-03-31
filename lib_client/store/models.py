@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator
 
 
 class PublishingHouse(models.Model):
@@ -22,7 +23,7 @@ class Author(models.Model):
         ordering = ['last_name', 'first_name']
 
     def __str__(self):
-        return f"{self.last_name}, {self.first_name}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Genre(models.Model):
@@ -43,7 +44,7 @@ class Book(models.Model):
     quantity = models.PositiveIntegerField(_('Quantity'), default=1)
 
     def __str__(self):
-        return self.title
+        return f'"{self.title}", {self.author}'
 
 
 class Cart(models.Model):
@@ -56,7 +57,7 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey('Cart', null=True, blank=True, on_delete=models.CASCADE,)
     book = models.ForeignKey(Book, verbose_name=_("book"), on_delete=models.CASCADE,)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
 
     def __str__(self):
         return f"{self.book}: {self.quantity}:"
