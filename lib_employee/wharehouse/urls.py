@@ -37,5 +37,5 @@ router.register(r'book-instance', views.BookInstanceViewSet)
 
 urlpatterns += [
     path('', include(router.urls)),
-    path('sync-books/', views.BookList.as_view()),
+    path('sync-books/', views.BookInstanceSyncList.as_view()),
 ]

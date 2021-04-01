@@ -9,6 +9,9 @@ class PublishingHouse(models.Model):
     info = models.TextField(_("info"), blank=True)
     year = models.IntegerField(_('year'))
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -29,6 +32,9 @@ class Author(models.Model):
 class Genre(models.Model):
     name = models.CharField(_("name"), max_length=200)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -42,6 +48,9 @@ class Book(models.Model):
     description = models.TextField(_("description"), blank=True)
     genre = models.ManyToManyField(Genre, verbose_name=_("genre"))
     quantity = models.PositiveIntegerField(_('Quantity'), default=1)
+
+    class Meta:
+        ordering = ['title', 'author']
 
     def __str__(self):
         return f'"{self.title}", {self.author}'
@@ -58,6 +67,9 @@ class CartItem(models.Model):
     cart = models.ForeignKey('Cart', null=True, blank=True, on_delete=models.CASCADE,)
     book = models.ForeignKey(Book, verbose_name=_("book"), on_delete=models.CASCADE,)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+
+    class Meta:
+        ordering = ['book']
 
     def __str__(self):
         return f"{self.book}: {self.quantity}:"
@@ -80,6 +92,9 @@ class OrderItem(models.Model):
     order = models.ForeignKey('Order', null=True, blank=True, on_delete=models.CASCADE,)
     book = models.ForeignKey(Book, verbose_name=_("book"), on_delete=models.CASCADE,)
     quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        ordering = ['book']
 
     def __str__(self):
         return f"{self.book}: {self.quantity}:"

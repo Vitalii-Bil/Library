@@ -12,7 +12,7 @@ from django.views.generic import DetailView, ListView
 
 from .forms import CartItemForm, OrderForm
 from .models import Author, Book, Cart, CartItem, Genre, Order, OrderItem, PublishingHouse
-from .tasks import send_order as celery_send_order
+#  from .tasks import send_order as celery_send_order
 
 
 @login_required
@@ -50,7 +50,7 @@ class BookListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)
-        p = Paginator(Book.objects.all(), self.paginate_by)
+        p = Paginator(Book.objects.all().order_by('title'), self.paginate_by)
         context['articles'] = p.page(context['page_obj'].number)
         context['genre_list'] = Genre.objects.all()
 
@@ -73,7 +73,7 @@ class PublishingHouseListView(ListView):
 # @cache_page(60 * 60)
 def pub_house_detail(request, pk):
     pub_house = get_object_or_404(PublishingHouse, pk=pk)
-    books = pub_house.book_set.all()
+    books = pub_house.book_set.all().order_by('title')
     paginator = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -97,7 +97,7 @@ class AuthorListView(ListView):
 # @cache_page(60 * 60)
 def author_detail(request, pk):
     author = get_object_or_404(Author, pk=pk)
-    books = author.book_set.all()
+    books = author.book_set.all().order_by('title')
     paginator = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -114,7 +114,7 @@ def author_detail(request, pk):
 # @cache_page(60 * 60)
 def genre_detail(request, pk):
     genre = get_object_or_404(Genre, pk=pk)
-    books = genre.book_set.all()
+    books = genre.book_set.all().order_by('title')
     paginator = Paginator(books, 10)
 
     page_number = request.GET.get('page')
@@ -163,8 +163,8 @@ def cart_detail(request):
 
             cart.delete()
 
-            celery_send_order.delay(order.first_name, order.last_name,
-                                    order.email, order.phone, books, total_cost)
+            #  celery_send_order.delay(order.first_name, order.last_name,
+            #                        order.email, order.phone, books, total_cost)
 
             messages.success(request, "Order created! We send you email in 10 minutes!")
             return HttpResponseRedirect(reverse('store:book_list'))
@@ -186,7 +186,7 @@ class OrderListView(ListView):
     template_name = 'store/order_list_page.html'
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user).order_by('date')
 
 
 @login_required

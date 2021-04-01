@@ -7,39 +7,40 @@ from .serializers import (AuthorSerializer, BookInstanceSerializer, BookInstance
                           BookSerializer, GenreSerializer, OrderSerializer, PublishingHouseSerializer)
 
 
-class BookList(mixins.ListModelMixin, generics.GenericAPIView):
+class BookInstanceSyncList(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = BookInstance.objects.order_by('book__title', 'book__author').filter(sold=False)
     serializer_class = BookInstanceSyncSerializer
+    paginator = None
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('id')
     serializer_class = OrderSerializer
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
-    queryset = Author.objects.all()
+    queryset = Author.objects.all().order_by('id')
     serializer_class = AuthorSerializer
 
 
 class PublishingHouseViewSet(viewsets.ModelViewSet):
-    queryset = PublishingHouse.objects.all()
+    queryset = PublishingHouse.objects.all().order_by('id')
     serializer_class = PublishingHouseSerializer
 
 
 class GenreViewSet(viewsets.ModelViewSet):
-    queryset = Genre.objects.all()
+    queryset = Genre.objects.all().order_by('id')
     serializer_class = GenreSerializer
 
 
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all()
+    queryset = Book.objects.all().order_by('id')
     serializer_class = BookSerializer
 
 
 class BookInstanceViewSet(viewsets.ModelViewSet):
-    queryset = BookInstance.objects.all()
+    queryset = BookInstance.objects.all().order_by('id')
     serializer_class = BookInstanceSerializer
