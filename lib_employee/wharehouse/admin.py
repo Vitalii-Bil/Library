@@ -8,10 +8,15 @@ def make_confirmed(modeladmin, request, queryset):
 make_confirmed.short_description = "Mark selected orders as confirmed"  # noqa:E305
 
 
+def make_sold(modeladmin, request, queryset):
+    queryset.update(sold=True)
+make_confirmed.short_description = "Mark selected books as sold"  # noqa:E305
+
+
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     fields = ['first_name', 'last_name', 'bio', 'date_of_birth']
-    list_display = ('first_name', 'last_name')
+    list_display = ('first_name', 'last_name', 'date_of_birth')
     search_fields = ('first_name', 'last_name')
 
 
@@ -27,7 +32,7 @@ class BookAdmin(admin.ModelAdmin):
     fields = ['title', 'year', 'publishing_house',
               'author', 'price', 'description', 'genre']
     search_fields = ('title',)
-    list_display = ('title', 'author')
+    list_display = ('title', 'author', 'year')
     list_filter = ('author', 'publishing_house', 'genre')
 
 
@@ -39,6 +44,9 @@ class GenreAdmin(admin.ModelAdmin):
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
     fields = ['book', 'sold']
+    search_fields = ('book__title',)
+    actions = [make_sold]
+    list_filter = ('book',)
 
 
 @admin.register(Order)
