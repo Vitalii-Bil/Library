@@ -10,7 +10,7 @@ make_confirmed.short_description = "Mark selected orders as confirmed"  # noqa:E
 
 def make_sold(modeladmin, request, queryset):
     queryset.update(sold=True)
-make_confirmed.short_description = "Mark selected books as sold"  # noqa:E305
+make_sold.short_description = "Mark selected books as sold"  # noqa:E305
 
 
 @admin.register(Author)
