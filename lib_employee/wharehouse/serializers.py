@@ -7,24 +7,24 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ['id', 'first_name', 'last_name', 'bio', 'date_of_birth']
+        fields = ['url', 'id', 'first_name', 'last_name', 'bio', 'date_of_birth']
 
 
 class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Genre
-        fields = ['id', 'name']
+        fields = ['url', 'id', 'name']
 
 
 class PublishingHouseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PublishingHouse
-        fields = ['id', 'name', 'info', 'year']
+        fields = ['url', 'id', 'name', 'info', 'year']
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BookSyncSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     genre = GenreSerializer(read_only=True, many=True)
     publishing_house = PublishingHouseSerializer(read_only=True)
@@ -36,8 +36,24 @@ class BookSerializer(serializers.ModelSerializer):
                   'publishing_house', 'author', 'genre']
 
 
-class BookInstanceSerializer(serializers.ModelSerializer):
-    book = BookSerializer(read_only=True)
+class BookInstanceSyncSerializer(serializers.ModelSerializer):
+    book = BookSyncSerializer(read_only=True)
+
+    class Meta:
+        many = True
+        model = BookInstance
+        fields = ['id', 'book', 'sold']
+
+
+class BookSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        many = True
+        model = Book
+        fields = ['id', 'title', 'year', 'price', 'description',
+                  'publishing_house', 'author', 'genre']
+
+
+class BookInstanceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         many = True

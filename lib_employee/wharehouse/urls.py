@@ -1,14 +1,41 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import include, path, re_path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
-# Create a router and register our viewsets with it.
 
-# The API URLs are now determined automatically by the router.
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Wharehouse API",
+        default_version="v1",
+        description="API books from wharehouse",
+    ),
+    #  url=settings.SWAGGER_SETTINGS["DEFAULT_API_URL"],
+    public=True,
+    permission_classes=(permissions.AllowAny, ),
+)
+
+
+# Swagger patterns
 urlpatterns = [
-    path('book/', views.BookList.as_view()),
-    path('order/create', views.OrderCreate.as_view())
+    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+
+router = DefaultRouter()
+router.register(r'order', views.OrderViewSet)
+router.register(r'author', views.AuthorViewSet)
+router.register(r'publishing-house', views.PublishingHouseViewSet)
+router.register(r'genre', views.GenreViewSet)
+router.register(r'book', views.BookViewSet)
+router.register(r'book-instance', views.BookInstanceViewSet)
+
+
+urlpatterns += [
+    path('', include(router.urls)),
+    path('sync-books/', views.BookList.as_view()),
+]

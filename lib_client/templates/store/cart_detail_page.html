@@ -25,7 +25,6 @@
 
 {% if cart_items %}
   <h4>Total cost: {{ total_cost }} UAH</h4>
-{% endif %}
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
@@ -33,5 +32,6 @@
     <button type="submit" class="btn btn-dark">Create an order</button>
   </div>
 </form>
+{% endif %}
 
 {% endblock %}
