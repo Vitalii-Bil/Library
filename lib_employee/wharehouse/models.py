@@ -53,7 +53,7 @@ class BookInstance(models.Model):
 
 
 class Order(models.Model):
-    book = models.CharField(_("title"), max_length=100)
+    book = models.CharField(_("book"), max_length=100)
     email = models.EmailField(max_length=254)
     first_name = models.CharField(_("first name"), max_length=100)
     last_name = models.CharField(_("last name"), max_length=100)
