@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import CartItem
 
@@ -14,4 +15,10 @@ class CartItemForm(forms.ModelForm):
 
     class Meta:
         model = CartItem
-        exclude = ['book', 'cart']
+        fields = ['quantity']
+
+    def clean_quantity(self):
+    	data = self.cleaned_data['quantity']
+    	if data > self.instance.book.quantity:
+    		raise ValidationError(f'We have in stock only {self.instance.book.quantity} books. Choose a smaller quantity')
+    	return data

@@ -4,6 +4,7 @@ from .models import Author, Book, BookInstance, Genre, Order, PublishingHouse
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    '''Basic ModelSrializer with all Author's fields'''
 
     class Meta:
         model = Author
@@ -11,6 +12,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class GenreSerializer(serializers.ModelSerializer):
+    '''Basic ModelSrializer with all Genre's fields'''
 
     class Meta:
         model = Genre
@@ -18,6 +20,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class PublishingHouseSerializer(serializers.ModelSerializer):
+    '''Basic ModelSrializer with all PublishingHouse's fields'''
 
     class Meta:
         model = PublishingHouse
@@ -25,6 +28,7 @@ class PublishingHouseSerializer(serializers.ModelSerializer):
 
 
 class BookSyncSerializer(serializers.ModelSerializer):
+    '''Basic ModelSrializer with all Book's fields and relations for sync dbs'''
     author = AuthorSerializer(read_only=True)
     genre = GenreSerializer(read_only=True, many=True)
     publishing_house = PublishingHouseSerializer(read_only=True)
@@ -37,6 +41,7 @@ class BookSyncSerializer(serializers.ModelSerializer):
 
 
 class BookInstanceSyncSerializer(serializers.ModelSerializer):
+    '''Basic ModelSrializer with all BookInstance's fields and relation to Book for sync dbs'''
     book = BookSyncSerializer(read_only=True)
 
     class Meta:
@@ -46,6 +51,8 @@ class BookInstanceSyncSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.HyperlinkedModelSerializer):
+    '''Basic ModelSrializer with all Book's fields'''
+
     class Meta:
         many = True
         model = Book
@@ -54,6 +61,7 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BookInstanceSerializer(serializers.HyperlinkedModelSerializer):
+    '''Basic ModelSrializer with all BookInstance's fields'''
 
     class Meta:
         many = True
@@ -62,6 +70,7 @@ class BookInstanceSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    '''Basic ModelSrializer with all Order's fields'''
 
     class Meta:
         model = Order
