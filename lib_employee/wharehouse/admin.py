@@ -2,12 +2,14 @@ from django.contrib import admin
 from django.core.mail import send_mail
 
 from .models import Author, Book, BookInstance, Genre, Order, PublishingHouse
+#  from .tasks import order_ready_send_mail as celery_order_ready_send_mail
 
 
 def make_confirmed(modeladmin, request, queryset):
     '''Action for making selected orders as confirmed'''
     queryset.update(confirmed=True)
     for q_obj in queryset:
+        #  celery_order_ready_send_mail.delay(q_obj.email)
         send_mail(
             subject="Your order",
             message="Your order was sent.",

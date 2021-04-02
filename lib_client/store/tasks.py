@@ -95,4 +95,4 @@ def send_order(first_name, last_name, email, phone_number, books, total_cost):
         "price": total_cost
     }
 
-    requests.post('http://localhost:8000/order', data=data)
+    requests.post('http://localhost:8000/order/', data=data)

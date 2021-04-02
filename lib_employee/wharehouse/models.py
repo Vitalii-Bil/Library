@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_lifecycle import AFTER_UPDATE, hook, LifecycleModelMixin
 
+#  from .tasks import order_ready_send_mail as celery_order_ready_send_mail
+
 
 class PublishingHouse(models.Model):
     '''Model for publishing house with name, info and launch year'''
@@ -80,6 +82,7 @@ class Order(LifecycleModelMixin, models.Model):
     @hook(AFTER_UPDATE, when='confirmed', changes_to=True)
     def send_email_after_confirmed(self):
         '''Hook: celery task, when order created for sending email to customer, that order in progress'''
+        #  celery_order_ready_send_mail.delay(self.email)
         send_mail(
             subject="Your order",
             message="Your order was sent",
