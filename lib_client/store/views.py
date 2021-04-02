@@ -164,8 +164,7 @@ def cart_detail(request):
                 order_item.order = order
                 order_item.save()
 
-                books[cart_item.book] = order_item.quantity
-
+                books[str(cart_item.book)] = order_item.quantity
             cart.delete()
             #  celery_send_order.delay(order.first_name, order.last_name,
             #                        order.email, order.phone, books, total_cost)

@@ -20,7 +20,7 @@ class Command(BaseCommand):
             genre.save()
             genre_list += [genre]
 
-        for _ in range(500):
+        for _ in range(100):
 
             author = Author(  # creating Author object
                 first_name=fake.first_name(),
