@@ -74,6 +74,12 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.book}: {self.quantity}:"
 
+    @property
+    def get_price(self):
+        "Returns full price for caert item"
+        price = self.quantity * self.book.price
+        return price
+
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -90,11 +96,15 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey('Order', null=True, blank=True, on_delete=models.CASCADE,)
-    book = models.ForeignKey(Book, verbose_name=_("book"), on_delete=models.CASCADE,)
+    book_title = models.CharField(_("book title"), max_length=100)
+    author_first_name = models.CharField(_("author first name"), max_length=100)
+    author_last_name = models.CharField(_("author last name"), max_length=100)
+    publishing_house_name = models.CharField(_("publishing hose name"), max_length=100)
     quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(_('price'), max_digits=8, decimal_places=2)
 
     class Meta:
-        ordering = ['book']
+        ordering = ['book_title']
 
     def __str__(self):
-        return f"{self.book}: {self.quantity}:"
+        return f"{self.book_title}: {self.quantity}:"

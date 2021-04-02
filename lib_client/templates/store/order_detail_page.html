@@ -13,9 +13,10 @@
 
 <div class="jumbotron">
   {% for order_item in order_items %}
-    <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' order_item.book.id %}">{{ order_item.book.title }}</a> </h4>
-    <h5>Description: {{ order_item.book.description|slice:":30" }}</h5></li>
-    <h5>Price: {{ order_item.book.price }}</h5>
+    <li><h4>Book: {{ order_item.book_title }}</h4>
+    <h5>Author: {{ order_item.author_first_name }} {{ order_item.author_last_name }}</h5>
+    <h5>Publishing house: {{ order_item.publishing_house_name }}</h5>
+    <h5>Price: {{ order_item.price }}</h5>
     <h5>Quantity: {{ order_item.quantity }}</h5>
     <hr>
   {% empty %}

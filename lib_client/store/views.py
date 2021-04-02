@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Sum
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -135,7 +134,9 @@ def genre_detail(request, pk):
 def cart_detail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = cart.cartitem_set.all()
-    total_cost = cart_items.aggregate(Sum('book__price')).get('price__sum') or 0.00
+
+    total_cost = sum(map(lambda x: x.get_price, cart_items))
+
     if request.method == 'POST':
 
         form = OrderForm(request.POST)
@@ -154,15 +155,18 @@ def cart_detail(request):
 
             for cart_item in cart_items:
                 order_item = OrderItem()
-                order_item.book = cart_item.book
+                order_item.book_title = cart_item.book.title
+                order_item.author_first_name = cart_item.book.author.first_name
+                order_item.author_last_name = cart_item.book.author.last_name
+                order_item.publishing_house_name = cart_item.book.publishing_house.name
                 order_item.quantity = cart_item.quantity
+                order_item.price = cart_item.get_price
                 order_item.order = order
                 order_item.save()
 
-                books[order_item.book] = order_item.quantity
+                books[cart_item.book] = order_item.quantity
 
             cart.delete()
-
             #  celery_send_order.delay(order.first_name, order.last_name,
             #                        order.email, order.phone, books, total_cost)
 
