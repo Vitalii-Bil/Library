@@ -9,9 +9,9 @@ from . import views
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Wharehouse API",
+        title="Warehouse API",
         default_version="v1",
-        description="API books from wharehouse",
+        description="API books from warehouse",
     ),
     #  url=settings.SWAGGER_SETTINGS["DEFAULT_API_URL"],
     public=True,

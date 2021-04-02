@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
 
-    'wharehouse.apps.WharehouseConfig',
+    'warehouse.apps.WarehouseConfig',
 ]
 
 MIDDLEWARE = [

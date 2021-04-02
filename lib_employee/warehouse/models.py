@@ -54,7 +54,7 @@ class Book(models.Model):
 
 class BookInstance(models.Model):
     '''Model for book instance with relation to book and field sold
-    (if we have on wharehouse more than 1 insctance of book)
+    (if we have on warehouse more than 1 insctance of book)
     '''
     book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     sold = models.BooleanField(_('sold'), default=False)
