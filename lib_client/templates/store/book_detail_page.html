@@ -5,7 +5,7 @@
 <h3>Book: {{ book.title }}</h3></li>
 <h5>Year: {{ book.year }}</h5>
 <h5>Author: <a class="p-2 text-dark" href="{% url 'store:author_detail' book.author.id %}">{{ book.author.first_name }} {{book.author.last_name}}</a></h5>
-<h4>Description: {{ book.description }}</h4>
+<h4>Description: {{ book.description }}...</h4>
 <h5>Publishing house: <a class="p-2 text-dark" href="{% url 'store:pub_house_detail' book.publishing_house.id %}">{{ book.publishing_house }}</a></h5>
 <h5>Price: {{ book.price }} UAH</h5>
 <h5>In stock: {{ book.quantity }}</h5>

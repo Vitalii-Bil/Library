@@ -9,7 +9,7 @@
 <div class="jumbotron">
   {% for cart_item in cart_items %}
     <li><h4><a class="p-2 text-dark" href="{% url 'store:book_detail' cart_item.book.id %}">{{ cart_item.book.title }}</a> </h4>
-    <h5>Description: {{ cart_item.book.description|slice:":30" }}</h5></li>
+    <h5>Description: {{ cart_item.book.description|slice:":30" }}...</h5></li>
     <h5>Price: {{ cart_item.get_price }}</h5>
     <h5>In stock: {{ cart_item.book.quantity }}</h5>
     <h5>In order: {{ cart_item.quantity }}</h5>
