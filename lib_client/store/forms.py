@@ -18,7 +18,8 @@ class CartItemForm(forms.ModelForm):
         fields = ['quantity']
 
     def clean_quantity(self):
-    	data = self.cleaned_data['quantity']
-    	if data > self.instance.book.quantity:
-    		raise ValidationError(f'We have in stock only {self.instance.book.quantity} books. Choose a smaller quantity')
-    	return data
+        data = self.cleaned_data['quantity']
+        if data > self.instance.book.quantity:
+            raise ValidationError(f'''We have in stock only {self.instance.book.quantity}
+                                      books. Choose a smaller quantity''')
+        return data

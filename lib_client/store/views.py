@@ -214,5 +214,3 @@ class CartItemUpdateView(UpdateView):
         if not self.object.cart.user == request.user:
             raise Http404()
         return super().get(request, *args, **kwargs)
-
-
