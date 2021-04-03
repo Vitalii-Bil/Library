@@ -1,4 +1,4 @@
-from lib_client.settings import env
+from lib_employee.settings import env
 
 USER_AGENTS_CACHE = "default"
 

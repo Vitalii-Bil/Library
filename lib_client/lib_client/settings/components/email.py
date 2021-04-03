@@ -1,4 +1,4 @@
-from shop.settings import env  # NOQA
+from lib_client.settings import env  # NOQA
 
 # Email configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
