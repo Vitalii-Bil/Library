@@ -84,6 +84,26 @@ services:
       retries: 5
 
 
+  celery:
+    <<: *lib_client
+    container_name: celery
+    environment:
+      C_FORCE_ROOT: 'true'
+      DATABASE_URL: 'postgresql://postgres:123123@db:5432/lib_client_db'
+      DATABASE_HOST: 'db'
+      DATABASE_PORT: '5432'
+      REDIS_URL: 'redis://redis:6379/0'
+      REDIS_CACHE: 'redis:6379'
+      AMQP_URL: 'amqp://rabbitmq:5672'
+      CHECK_WEB: 'true'
+      WEB_HOST: 'localhost'
+      WEB_PORT: '8000'
+    depends_on:
+      - redis
+      - db
+    command: celery -A shop worker -B -l INFO
+
+
   nginx:
     container_name: nginx
     build:
@@ -93,6 +113,7 @@ services:
       - 5555:5555
     depends_on:
       - mailhog
+
 
 volumes:
   db-data:
