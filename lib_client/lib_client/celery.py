@@ -1,18 +1,15 @@
 import os
 
 from celery import Celery
-from celery.schedules import crontab
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lib_client.settings')
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lib_client.settings")
 
-app = Celery('lib_client')
-app.config_from_object('django.conf:settings', namespace='CELERY')
+from django.conf import settings  # noqa
 
+app = Celery("lib_client")
+
+# Using a string here means the worker will not have to
+# pickle the object when using Windows.
+app.config_from_object("django.conf:settings", namespace='CELERY_')
 app.autodiscover_tasks()
-
-app.conf.beat_schedule = {
-    'sync_db_at_midnight': {
-        'task': 'posts.tasks.sync_db',
-        'schedule': crontab(minute=0, hour=0),
-    },
-}
