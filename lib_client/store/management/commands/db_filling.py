@@ -45,7 +45,7 @@ class Command(BaseCommand):
                     author=author,
                     price=round(random.uniform(50, 300), 2),
                     description=fake.text(max_nb_chars=400),
-                    quantity=random.randint(1,10)
+                    quantity=random.randint(1, 10)
                 )
                 book.save()
 
