@@ -53,7 +53,7 @@ def sync_db():
 
     try:
         url = 'http://localhost:8000/sync-books/'
-        response = requests.get(url).json()
+        response = requests.get(url=url).json()
 
         numb_of_similar_books = 1  # variable for counting similar books
         response_len = len(response)
@@ -95,4 +95,4 @@ def send_order(first_name, last_name, email, phone_number, books, total_cost):
         "price": total_cost
     }
 
-    requests.post('http://localhost:8000/order/', data=data)
+    requests.post(url='http://lib_employee:8000/order/', data=data)
