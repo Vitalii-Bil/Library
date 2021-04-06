@@ -52,8 +52,8 @@ def change_or_add_book(resp, numb_of_similar_books):
 def sync_db():
 
     try:
-        url = 'http://127.0.0.1:8000/sync-books'
-        response = requests.get(url).json()
+        url = 'http://lib_employee:8000/sync-books'
+        response = requests.get(url=url).json()
 
         numb_of_similar_books = 1  # variable for counting similar books
         response_len = len(response)
@@ -87,12 +87,11 @@ def sync_db():
 def send_order(first_name, last_name, email, phone_number, books, total_cost):
 
     data = {
-        "book": books,
+        "book": f"{books}",
         "email": f"{email}",
         "first_name": f"{first_name}",
         "last_name": f"{last_name}",
         "phone": f"{phone_number}",
         "price": total_cost
     }
-
-    requests.post('http://localhost:8000/order/', data=data)
+    requests.post(url='http://lib_employee:8000/order', data=data)
